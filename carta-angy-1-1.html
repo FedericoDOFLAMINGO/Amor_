@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi Princesita Hermosa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark:  #272b00;
+    --mid:   #54582f;
+    --sage:  #86895d;
+    --gold:  #f8de7e;
+    --cream: #feeeb8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  /* ── WELCOME ── */
+  #welcome {
+    position:fixed; inset:0; z-index:9999;
+    background:var(--dark);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:30px;
+    transition:opacity .9s ease, visibility .9s;
+  }
+  #welcome.out { opacity:0; visibility:hidden; pointer-events:none; }
+  #welcome .clock {
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(3rem,13vw,6rem);
+    color:var(--gold);
+    letter-spacing:.04em;
+    animation:glow 2s ease-in-out infinite;
+    text-align:center;
+    padding:0 24px;
+  }
+  @keyframes glow {
+    0%,100%{ text-shadow:0 0 30px rgba(248,222,126,.4); }
+    50%    { text-shadow:0 0 80px rgba(248,222,126,.85); }
+  }
+  #welcome .sub {
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(1.5rem,6vw,2.4rem);
+    color:var(--cream);
+    text-align:center;
+    max-width:420px; padding:0 24px;
+    line-height:1.55;
+  }
+  #welcome button {
+    font-family:'Cinzel',serif;
+    font-size:.82rem; letter-spacing:.22em;
+    color:var(--dark); background:var(--gold);
+    border:none; border-radius:50px;
+    padding:14px 40px; cursor:pointer;
+    box-shadow:0 4px 24px rgba(248,222,126,.35);
+    transition:transform .2s,box-shadow .2s;
+  }
+  #welcome button:hover { transform:scale(1.06); box-shadow:0 6px 36px rgba(248,222,126,.6); }
+
+  /* ── BODY ── */
+  body {
+    background:var(--sage);
+    font-family:'Cormorant Garamond',serif;
+    min-height:100vh; overflow-x:hidden;
+  }
+  #canvas-bg { position:fixed; inset:0; pointer-events:none; z-index:0; }
+
+  /* ── LAYOUT ── */
+  .wrap {
+    position:relative; z-index:1;
+    max-width:700px; margin:0 auto;
+    padding:48px 20px 90px;
+  }
+
+  /* ── ENCABEZADO ── */
+  .header { text-align:center; margin-bottom:44px; }
+  .header .eyebrow {
+    font-family:'Cinzel',serif;
+    font-size:.72rem; letter-spacing:.35em;
+    color:var(--cream); opacity:.65;
+    margin-bottom:14px;
+  }
+  .header .title {
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(3rem,12vw,5rem);
+    color:var(--gold); line-height:1;
+    text-shadow:0 2px 28px rgba(39,43,0,.55);
+  }
+  .header .tagline {
+    font-style:italic;
+    font-size:clamp(.95rem,3vw,1.1rem);
+    color:var(--cream); opacity:.8;
+    margin-top:8px; letter-spacing:.06em;
+  }
+
+  /* ── SEPARADOR ── */
+  .sep {
+    display:flex; align-items:center; gap:14px;
+    max-width:300px; margin:0 auto 40px;
+  }
+  .sep span { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--gold),transparent); opacity:.45; }
+  .sep i { color:var(--gold); font-style:normal; animation:beat 1.5s ease infinite; }
+  @keyframes beat{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+  /* ── CARTA (papel) ── */
+  .card {
+    background:linear-gradient(155deg,#fefae8 0%,#f4eed4 100%);
+    border-radius:3px;
+    padding:clamp(30px,6vw,58px) clamp(26px,6vw,54px);
+    box-shadow:0 2px 0 #cec06a, 0 10px 48px rgba(39,43,0,.3),
+               inset 0 0 0 1px rgba(248,222,126,.12);
+    position:relative; margin-bottom:28px;
+    overflow:hidden;
+  }
+  /* borde superior dorado */
+  .card::before {
+    content:''; position:absolute;
+    top:0;left:0;right:0; height:3px;
+    background:linear-gradient(to right,var(--mid),var(--gold),var(--mid));
+  }
+  /* líneas de cuaderno */
+  .card::after {
+    content:''; position:absolute;
+    inset:64px 0 0 0;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      transparent,transparent 31px,
+      rgba(134,137,93,.08) 31px,rgba(134,137,93,.08) 32px
+    );
+    pointer-events:none;
+  }
+
+  .card .saludo {
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(1.7rem,5vw,2.5rem);
+    color:var(--mid);
+    text-align:center; margin-bottom:1.4em;
+    position:relative; z-index:1;
+    line-height:1.25;
+  }
+  .card p {
+    font-size:clamp(1rem,2.8vw,1.17rem);
+    line-height:2; color:#2b2e0a;
+    margin-bottom:1.4em; text-align:justify;
+    position:relative; z-index:1;
+  }
+  .card p:last-of-type { margin-bottom:0; }
+  .em { font-style:italic; font-weight:600; color:var(--mid); }
+
+  .firma {
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(1.9rem,5vw,2.7rem);
+    color:var(--mid); text-align:right;
+    margin-top:2.2em; position:relative; z-index:1;
+  }
+  .firma small {
+    display:block;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic; font-size:.78rem;
+    color:var(--sage); letter-spacing:.1em; margin-top:5px;
+  }
+
+  /* ── BOTÓN EXPLOSIÓN ── */
+  .boom-btn {
+    display:block; margin:46px auto 0;
+    font-family:'Cinzel',serif;
+    font-size:.8rem; letter-spacing:.22em;
+    color:var(--dark); background:var(--gold);
+    border:none; border-radius:50px;
+    padding:15px 38px; cursor:pointer;
+    box-shadow:0 4px 24px rgba(248,222,126,.35);
+    transition:transform .2s,box-shadow .2s;
+    position:relative; z-index:2;
+  }
+  .boom-btn:hover { transform:scale(1.07); box-shadow:0 6px 36px rgba(248,222,126,.65); }
+
+  /* ── CORAZONES FLOTANTES ── */
+  .fh {
+    position:fixed; pointer-events:none;
+    animation:floatUp 3.8s ease-in forwards;
+    z-index:9998; line-height:1;
+  }
+  @keyframes floatUp {
+    0%  { transform:translateY(0) scale(0) rotate(0deg); opacity:1; }
+    25% { transform:translateY(-70px) scale(1.1) rotate(-6deg); opacity:1; }
+    100%{ transform:translateY(-320px) scale(.5) rotate(14deg); opacity:0; }
+  }
+
+  /* ── FOTO ── */
+  .photo-frame {
+    position:relative;
+    max-width:340px;
+    margin:0 auto 36px;
+    z-index:1;
+  }
+  .photo-frame .inner {
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow:0 4px 0 #cec06a, 0 14px 48px rgba(39,43,0,.38),
+               inset 0 0 0 1px rgba(248,222,126,.15);
+    background:linear-gradient(155deg,#fefae8,#f4eed4);
+    padding:10px 10px 42px;
+  }
+  .photo-frame img {
+    width:100%;
+    display:block;
+    border-radius:2px;
+  }
+  .photo-frame .caption {
+    font-family:'Great Vibes',cursive;
+    font-size:1.35rem;
+    color:var(--mid);
+    text-align:center;
+    padding-top:10px;
+    line-height:1.3;
+  }
+  /* borde superior dorado igual que .card */
+  .photo-frame .inner::before {
+    content:''; display:block;
+    height:3px; margin:-10px -10px 10px;
+    background:linear-gradient(to right,var(--mid),var(--gold),var(--mid));
+  }
+
+  @media(max-width:480px){
+    .photo-frame{ max-width:90%; }
+  }
+
+  /* ── VIDEO ── */
+  .video-frame {
+    position:relative;
+    max-width:380px;
+    margin:0 auto 36px;
+    z-index:1;
+  }
+  .video-frame .inner {
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow:0 4px 0 #cec06a, 0 14px 48px rgba(39,43,0,.38),
+               inset 0 0 0 1px rgba(248,222,126,.15);
+    background:#272b00;
+    padding:10px 10px 42px;
+  }
+  .video-frame .inner::before {
+    content:''; display:block;
+    height:3px; margin:-10px -10px 10px;
+    background:linear-gradient(to right,var(--mid),var(--gold),var(--mid));
+  }
+  .video-frame video {
+    width:100%; display:block;
+    border-radius:2px;
+    background:#000;
+  }
+  .video-frame .caption {
+    font-family:'Great Vibes',cursive;
+    font-size:1.35rem;
+    color:var(--gold);
+    text-align:center;
+    padding-top:10px;
+    line-height:1.3;
+  }
+
+  /* ── PALABRAS FLOTANTES ── */
+  .fw {
+    position:fixed; pointer-events:none; z-index:9997;
+    font-family:'Great Vibes',cursive;
+    color:var(--gold);
+    text-shadow:0 0 14px rgba(248,222,126,.7);
+    white-space:nowrap;
+    animation:wordFloat 4.2s ease-out forwards;
+  }
+  @keyframes wordFloat {
+    0%   { opacity:0; transform:translateY(0) scale(.7); }
+    15%  { opacity:1; transform:translateY(-30px) scale(1); }
+    80%  { opacity:1; }
+    100% { opacity:0; transform:translateY(-200px) scale(.85); }
+  }
+
+  @media(max-width:480px){
+    .video-frame{ max-width:92%; }
+  }
+
+  /* ── NOTA MÚSICA ── */
+  #mBtn {
+    position:fixed; bottom:22px; right:22px;
+    width:46px; height:46px; border-radius:50%;
+    background:var(--dark); border:2px solid var(--gold);
+    color:var(--gold); font-size:1.2rem;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; z-index:9000;
+    box-shadow:0 2px 16px rgba(0,0,0,.35);
+    transition:transform .2s;
+  }
+  #mBtn:hover { transform:scale(1.12); }
+  #mBtn.on { animation:spinNote 4s linear infinite; }
+  @keyframes spinNote{ to{ transform:rotate(360deg); } }
+
+  /* ── REVEAL ── */
+  .rv { opacity:0; transform:translateY(26px); transition:opacity .75s ease,transform .75s ease; }
+  .rv.show { opacity:1; transform:none; }
+
+  @media(max-width:480px){
+    .card{ padding:28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<!-- WELCOME -->
+<div id="welcome">
+  <div class="clock">Mi princesita hermosa</div>
+  <div class="sub">Hay algo muy especial esperando por ti, mi niña linda…</div>
+  <button onclick="open_letter()">Abrir mi carta ✉️</button>
+</div>
+
+<!-- MÚSICA -->
+<div id="mBtn" onclick="toggleMusic()">🎵</div>
+<audio id="aud" loop>
+  <source src="ForEver.mp3" type="audio/mpeg">
+</audio>
+
+<!-- CARTA -->
+<div class="wrap">
+
+  <div class="header rv">
+    <div class="eyebrow">para siempre · en cada latido · por ti</div>
+    <div class="title">Para mi Angy</div>
+    <div class="tagline">mi corazoncito linda, mi todo</div>
+  </div>
+
+  <div class="sep rv"><span></span><i>♥</i><span></span></div>
+
+  <!-- FOTO -->
+  <div class="photo-frame rv">
+    <div class="inner">
+      <img src="AfL.jpg" alt="Nosotros">
+      <div class="caption">tú y yo, para siempre 💚</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="card rv">
+    <div class="saludo">Mi niña hermosa, mi amor…</div>
+
+    <p>Pienso en ti en todo momento, y no porque sea un ritual o una costumbre, sino porque tú ya vives en cada segundo de mi día. Eres el amor tan bonito que siempre soñé sin saber que existía, el que nunca creí merecer, y sin embargo aquí estás, siendo todo lo que siempre quise y más de lo que jamás imaginé.</p>
+
+    <p>Todo lo que hago por ti no viene de un querer ser correspondido, ni de miedo a perderte. Viene de amarte, de adorarte, de tenerte tan adentro que ya no sé distinguir dónde termino yo y dónde empiezas tú. <span class="em">Me elevas.</span> Me haces sentir completo y amado de una forma que no conocía, y en cada momento que estoy contigo siento con absoluta certeza que estoy justo donde debo estar.</p>
+
+    <p>Quiero que siempre recuerdes que nunca mereciste el daño que pasaste, ni el tiempo sola, ni todo lo que te hizo dudar de si alguien podría quererte de verdad y acercarse tanto a tu corazón. Merecías esto desde siempre: <span class="em">ser el mundo entero de alguien</span>. Y ese alguien quiero ser yo.</p>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="card rv">
+    <p>Mi princesita, todo lo que siempre quisiste, un amor bonito, sentirte escuchada, ser elegida cada día sin que sea un sacrificio, nunca fue demasiado. Nunca fue una exigencia ni un capricho. <span class="em">Elegirte es la bendición más grande que tengo.</span> Quererte y escucharte no es difícil, es lo más natural y lo más bonito que existe en mi vida.</p>
+
+    <p>Quiero ser el hombre que te demuestre que ese amor de película que siempre quisiste sentir es real, que existe, que lo tienes. Porque tú eres lo más bonito que hay en mi mundo, y mi amor es tuyo por completo, existe por ti y solamente para ti. No hay nada ni nadie que haya amado más, ni que pudiera amar más, que a ti.</p>
+
+    <p><span class="em">Te amo en cada día, en cada despertar, en cada parpadear, en cada respirar, en cada latido.</span> Siempre estás y siempre serás tú.</p>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="card rv">
+    <p>Sé que sabes que te quiero. Pero lo que quizás no sabes del todo es <span class="em">cuánto</span>. Nunca dejo de pensarte. Me gusta recordar todo de ti, amarte en silencio mientras hago cualquier cosa, porque me hace feliz de una manera que no sé explicar. Que estés en mi vida, que me ames, que me permitas ver cada parte de ti y de tu corazón, es un regalo que no termino de agradecer.</p>
+
+    <p>Encontrarte fue parte del destino, y doy gracias todos los días por todo lo que somos, por lo que hemos vivido juntos, por cada abrazo, cada mirada, cada beso, cada momento en que nos hemos elegido. Gracias por amarme tanto y por permitirme ser todo para ti.</p>
+
+    <p>No hay nada más correcto en todo lo que soy que <span class="em">amarte siempre, con todo lo que hay en mi alma</span>. Eres mi futuro y el sueño que más deseo. Mi corazoncito linda, espero que cada vez que leas esto sientas lo mucho que te quiero, lo mucho que significas, y lo seguro que estoy de que tú eres mi decisión en esta vida y en todas las que nos queden.</p>
+
+    <div class="firma">
+      Tu Latoso y Tontito Fer 💚
+      <small>en cada latido · para siempre · por ti</small>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="video-frame rv">
+    <div class="inner">
+      <video autoplay muted loop playsinline>
+        <source src="video-angy.mp4" type="video/mp4">
+      </video>
+      <div class="caption">cada momento contigo es mi favorito 💚</div>
+    </div>
+  </div>
+
+  <button class="boom-btn" onclick="bigBoom(); launchWords()">💚 Explotar corazones 💚</button>
+
+</div>
+
+<script>
+/* ── WELCOME ── */
+function open_letter() {
+  document.getElementById('welcome').classList.add('out');
+  initParticles();
+  revealInit();
+  const a = document.getElementById('aud');
+  if (a.querySelector('source')) {
+    a.play().catch(()=>{});
+    document.getElementById('mBtn').classList.add('on');
+  }
+}
+
+/* ── MÚSICA ── */
+function toggleMusic() {
+  const a = document.getElementById('aud'), b = document.getElementById('mBtn');
+  if (!a.querySelector('source')) return;
+  if (a.paused) { a.play(); b.classList.add('on'); }
+  else { a.pause(); b.classList.remove('on'); }
+}
+
+/* ── SCROLL REVEAL ── */
+function revealInit() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+}
+
+/* ── CORAZONES AL CLICK ── */
+document.addEventListener('click', e => {
+  if (e.target.closest('#welcome') || e.target.closest('.boom-btn')) return;
+  spawnHearts(e.clientX, e.clientY, 5);
+});
+
+const HE = ['💚','🌿','💛','✨','🍀','💚','💚','🌱'];
+function spawnHearts(x, y, n) {
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    d.className = 'fh';
+    d.textContent = HE[Math.floor(Math.random() * HE.length)];
+    d.style.cssText = `left:${x+(Math.random()-.5)*70}px;top:${y}px;font-size:${.9+Math.random()*1.1}rem;animation-duration:${2.8+Math.random()*2}s`;
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 5000);
+  }
+}
+
+function bigBoom() {
+  for (let i = 0; i < 45; i++) {
+    setTimeout(() => spawnHearts(
+      90 + Math.random() * (window.innerWidth - 180),
+      80 + Math.random() * (window.innerHeight - 160),
+      3
+    ), i * 50);
+  }
+}
+
+/* ── PALABRAS BONITAS ── */
+const WORDS = [
+  'Mi princesita 💚','Amo tus ojos ✨','Tu sonrisa es todo 🌿',
+  'Eres tan linda 💛','Te amo tanto 💚','Mi niña hermosa 🍀',
+  'Eres mi favorita ✨','Mi corazoncito 💚','Me haces tan feliz 🌱',
+  'Eres perfecta 💛','Amo tu risa 💚','Eres mi mundo entero 🌿',
+  'Qué bonita eres ✨','Mi todo 💚','Te elijo siempre 💛',
+  'Eres maravillosa 🍀','Mi amor bonito 💚','Eres mi calma ✨',
+];
+function launchWords() {
+  const used = [...WORDS].sort(() => Math.random()-.5).slice(0, 10);
+  used.forEach((txt, i) => {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.className = 'fw';
+      d.textContent = txt;
+      const size = 1.1 + Math.random() * .7;
+      d.style.cssText = `
+        left:${10 + Math.random() * 75}vw;
+        top:${30 + Math.random() * 50}vh;
+        font-size:${size}rem;
+        animation-duration:${3.5 + Math.random() * 1.5}s;
+        animation-delay:${Math.random() * .3}s;
+      `;
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 6000);
+    }, i * 180);
+  });
+}
+
+/* ── PARTÍCULAS CANVAS ── */
+function initParticles() {
+  const cv = document.getElementById('canvas-bg');
+  const cx = cv.getContext('2d');
+  let W, H;
+  const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  resize(); addEventListener('resize', resize);
+
+  const cols = ['#86895d','#54582f','#f8de7e','#feeeb8','#9ea36e','#272b00'];
+
+  class P {
+    constructor(init) {
+      this.x  = Math.random() * (W||800);
+      this.y  = init ? Math.random() * (H||600) : -20;
+      this.r  = 1.5 + Math.random() * 3;
+      this.vx = (Math.random()-.5)*.4;
+      this.vy = .3 + Math.random()*.55;
+      this.a  = .12 + Math.random()*.3;
+      this.c  = cols[Math.floor(Math.random()*cols.length)];
+      this.heart = Math.random() > .6;
+    }
+    drawHeart() {
+      const s = this.r*.75;
+      cx.save(); cx.translate(this.x,this.y);
+      cx.globalAlpha = this.a; cx.fillStyle = this.c;
+      cx.beginPath();
+      cx.moveTo(0,s*.4);
+      cx.bezierCurveTo(-s,-s*.2,-s*2,s*.6,0,s*1.6);
+      cx.bezierCurveTo(s*2,s*.6,s,-s*.2,0,s*.4);
+      cx.fill(); cx.restore();
+    }
+    update() {
+      this.x += this.vx + Math.sin(Date.now()*.001+this.y*.01)*.15;
+      this.y += this.vy;
+      if (this.y > H+20) { this.y=-20; this.x=Math.random()*W; }
+    }
+    draw() {
+      if (this.heart) { this.drawHeart(); return; }
+      cx.save(); cx.globalAlpha=this.a; cx.fillStyle=this.c;
+      cx.beginPath(); cx.arc(this.x,this.y,this.r,0,Math.PI*2); cx.fill(); cx.restore();
+    }
+  }
+
+  const ps = Array.from({length:70}, (_,i) => new P(true));
+  (function loop() { cx.clearRect(0,0,W,H); ps.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
